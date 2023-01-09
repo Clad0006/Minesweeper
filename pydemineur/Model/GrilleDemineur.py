@@ -90,3 +90,29 @@ def getCelluleGrilleDemineur(grille:list,coord:tuple)->dict:
     if isCoordonneeCorrecte(grille,coord)==False:
         raise IndexError("getCelluleGrilleDemineur : coordonnée non contenue dans la grille")
     return grille[coord[0]][coord[1]]
+
+def getContenuGrilleDemineur(grille:list,coord:tuple)->int:
+    return grille[coord[0]][coord[1]][const.CONTENU]
+
+def setContenuGrilleDemineur(grille:list,coord:tuple,n:int)-> None:
+    if type_grille_demineur(grille)==False or type_coordonnee(coord)==False or type(n)!=int:
+        raise TypeError("SetContenuGrilleDemineur : Le type de l'un ds coordonnées n'est pas correct")
+    if ((0 > n or n> 8) and n != const.ID_MINE) and type(n) == int:
+        raise ValueError("construireCellule : le contenu",n,"n'est pas valide")
+    grille[coord[0]][coord[1]][const.CONTENU]=n
+    return None
+
+def isVisibleGrilleDemineur(grille:list,coord:tuple)-> bool:
+    return grille[coord[0]][coord[1]][const.VISIBLE]
+
+def setVisibleGrilleDemineur(grille:list,coord:tuple,b:bool)-> None:
+    if type_grille_demineur(grille)==False or type_coordonnee(coord)==False or type(b)!=bool:
+        raise TypeError("SetContenuGrilleDemineur : Le type de l'un ds coordonnées n'est pas correct")
+    grille[coord[0]][coord[1]][const.VISIBLE]=b
+    return None
+
+def contienMineGrilleDemineur(grille:list,coord:tuple)->bool:
+    res=False
+    if grille[coord[0]][coord[1]][const.CONTENU]==cont.ID_MINE:
+        res=True
+    return res
