@@ -26,12 +26,12 @@ def isContenuCorrect(n:int)->bool:
         res=True
     return res
 
-def construireCellule(n:int=0,visible:bool=False)->dict:
+def construireCellule(n:int=0,visible:bool=False,ann:str=None)->dict:
     if ((0 > n or n> 8) and n != const.ID_MINE) and type(n) == int:
         raise ValueError("construireCellule : le contenu",n,"n'est pas valide")
     if type(visible)!=bool:
         raise TypeError("construireCellule : le second paramètre",visible,"n'est pas un booleen")
-    cellule={const.CONTENU:n,const.VISIBLE:visible}
+    cellule={const.CONTENU:n,const.VISIBLE:visible,const.ANNOTATION:None}
     return cellule
 
 def getContenuCellule(cell:dict)->int:
@@ -57,5 +57,11 @@ def setVisibleCellule(cell:dict,b:bool)->None:
 def contientMineCellule(cell:dict)->bool:
     res=False
     if cell[const.CONTENU]==const.ID_MINE:
+        res=True
+    return res
+
+def isAnnotationCorrecte(ann:str)->bool:
+    res=False
+    if ann==None or ann==const.DOUTE or ann==const.FLAG:
         res=True
     return res
