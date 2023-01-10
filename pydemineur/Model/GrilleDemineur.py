@@ -218,3 +218,9 @@ def perduGrilleDemineur(grille:list)-> bool:
             if grille[i][j][const.CONTENU]==const.ID_MINE and grille[i][j][const.VISIBLE]==True:
                 res=True
     return res
+
+def reinitialiserGrilleDemineur(grille:list)->None:
+    for i in range(len(grille)):
+        for j in range(len(grille[0])):
+            reinitialiserCellule(grille[i][j])
+    return None
