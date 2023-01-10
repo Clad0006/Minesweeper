@@ -130,9 +130,9 @@ def contienMineGrilleDemineur(grille: list, coord: tuple) -> bool:
 
 
 def getCoordonneeVoisinsGrilleDemineur(grille: list, coord: tuple) -> list:
-    if type_grille_demineur(grille)==False or type_coordonnee(coord)==False:
+    if type_grille_demineur(grille) == False or type_coordonnee(coord) == False:
         raise TypeError("getCoordonneeVoisinsGrilleDemineur : un des deux paramètres n'a pas le bon type")
-    if isCoordonneeCorrecte(grille,coord)==False:
+    if isCoordonneeCorrecte(grille, coord) == False:
         raise IndexError("getCoordonneeVoisinsGrilleDemineur : la coordonnee n'est pas contenue dans la grille")
     res = []
     if 0 <= coord[0] - 1 < len(grille) and 0 <= coord[1] < len(grille[0]):
@@ -153,3 +153,18 @@ def getCoordonneeVoisinsGrilleDemineur(grille: list, coord: tuple) -> list:
         res.append((coord[0] + 1, coord[1] - 1))
     print(res)
     return res
+
+
+def placerMinesGrilleDemineur(grille: list, nb: int, coord: tuple) -> None:
+    if nb < 0 or nb > (len(grille[0]) * len(grille) - 1):
+        raise ValueError("placerMinesGrilleDemineur : Nombre de mines a placer incorrect")
+    if isCoordonneeCorrecte(grille, coord) == False:
+        raise IndexError("placerMinesGrilleDemineur : La coordonnee n'est pas dans la grille")
+    i=0
+    while i<nb:
+        a = randint(0, len(grille) - 1)
+        b = randint(0, len(grille[0]) - 1)
+        if (a, b) != coord and grille[a][b][const.CONTENU]!=const.ID_MINE:
+            setContenuCellule(grille[a][b], const.ID_MINE)
+            i+=1
+    return None
