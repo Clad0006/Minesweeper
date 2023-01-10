@@ -130,22 +130,26 @@ def contienMineGrilleDemineur(grille: list, coord: tuple) -> bool:
 
 
 def getCoordonneeVoisinsGrilleDemineur(grille: list, coord: tuple) -> list:
+    if type_grille_demineur(grille)==False or type_coordonnee(coord)==False:
+        raise TypeError("getCoordonneeVoisinsGrilleDemineur : un des deux paramètres n'a pas le bon type")
+    if isCoordonneeCorrecte(grille,coord)==False:
+        raise IndexError("getCoordonneeVoisinsGrilleDemineur : la coordonnee n'est pas contenue dans la grille")
     res = []
-    if isCoordonneeCorrecte(grille, (coord[0] - 1, coord[1])):
+    if 0 <= coord[0] - 1 < len(grille) and 0 <= coord[1] < len(grille[0]):
         res.append((coord[0] - 1, coord[1]))
-    if isCoordonneeCorrecte(grille, (coord[0], coord[1] - 1)):
+    if 0 <= coord[0] < len(grille) and 0 <= coord[1] - 1 < len(grille[0]):
         res.append((coord[0], coord[1] - 1))
-    if isCoordonneeCorrecte(grille, (coord[0] + 1, coord[1])):
+    if 0 <= coord[0] + 1 < len(grille) and 0 <= coord[1] < len(grille[0]):
         res.append((coord[0] + 1, coord[1]))
-    if isCoordonneeCorrecte(grille, (coord[0], coord[1] + 1)):
+    if 0 <= coord[0] < len(grille) and 0 <= coord[1] + 1 < len(grille[0]):
         res.append((coord[0], coord[1] + 1))
-    if isCoordonneeCorrecte(grille, (coord[0] - 1, coord[1] - 1)):
-        res.append((coord[0] - 1, coord[1]))
-    if isCoordonneeCorrecte(grille, (coord[0] + 1, coord[1] + 1)):
+    if 0 <= coord[0] - 1 < len(grille) and 0 <= coord[1] - 1 < len(grille[0]):
+        res.append((coord[0] - 1, coord[1] - 1))
+    if 0 <= coord[0] + 1 < len(grille) and 0 <= coord[1] + 1 < len(grille[0]):
         res.append((coord[0] + 1, coord[1] + 1))
-    if isCoordonneeCorrecte(grille, (coord[0] - 1, coord[1] + 1)):
+    if 0 <= coord[0] - 1 < len(grille) and 0 <= coord[1] + 1 < len(grille[0]):
         res.append((coord[0] - 1, coord[1] + 1))
-    if isCoordonneeCorrecte(grille, (coord[0] + 1, coord[1] - 1)):
+    if 0 <= coord[0] + 1 < len(grille) and 0 <= coord[1] - 1 < len(grille[0]):
         res.append((coord[0] + 1, coord[1] - 1))
     print(res)
     return res
