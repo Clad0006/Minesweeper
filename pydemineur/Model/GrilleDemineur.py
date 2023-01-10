@@ -191,3 +191,6 @@ def getNbMinesGrilleDemineur(grille:list)->int:
             if grille[i][j][const.CONTENU] == const.ID_MINE:
                 res+=1
     return res
+
+def getAnnotationGrilleDemineur(grille:list,coord:tuple)->str:
+    return grille[coord[0]][coord[1]][const.ANNOTATION]
