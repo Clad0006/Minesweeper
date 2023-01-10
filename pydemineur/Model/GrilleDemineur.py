@@ -122,9 +122,9 @@ def setVisibleGrilleDemineur(grille: list, coord: tuple, b: bool) -> None:
     return None
 
 
-def contienMineGrilleDemineur(grille: list, coord: tuple) -> bool:
+def contientMineGrilleDemineur(grille: list, coord: tuple) -> bool:
     res = False
-    if grille[coord[0]][coord[1]][const.CONTENU] == cont.ID_MINE:
+    if grille[coord[0]][coord[1]][const.CONTENU] == const.ID_MINE:
         res = True
     return res
 
@@ -151,7 +151,6 @@ def getCoordonneeVoisinsGrilleDemineur(grille: list, coord: tuple) -> list:
         res.append((coord[0] - 1, coord[1] + 1))
     if 0 <= coord[0] + 1 < len(grille) and 0 <= coord[1] - 1 < len(grille[0]):
         res.append((coord[0] + 1, coord[1] - 1))
-    print(res)
     return res
 
 
@@ -160,11 +159,24 @@ def placerMinesGrilleDemineur(grille: list, nb: int, coord: tuple) -> None:
         raise ValueError("placerMinesGrilleDemineur : Nombre de mines a placer incorrect")
     if isCoordonneeCorrecte(grille, coord) == False:
         raise IndexError("placerMinesGrilleDemineur : La coordonnee n'est pas dans la grille")
-    i=0
-    while i<nb:
+    i = 0
+    while i < nb:
         a = randint(0, len(grille) - 1)
         b = randint(0, len(grille[0]) - 1)
-        if (a, b) != coord and grille[a][b][const.CONTENU]!=const.ID_MINE:
+        if (a, b) != coord and grille[a][b][const.CONTENU] != const.ID_MINE:
             setContenuCellule(grille[a][b], const.ID_MINE)
-            i+=1
+            i += 1
+    return None
+
+
+def compterMinesVoisinesGrilleDemineur(grille: list) -> None:
+    for i in range(len(grille)):
+        for j in range(len(grille[0])):
+            mines = 0
+            if grille[i][j][const.CONTENU] != const.ID_MINE:
+                coord = getCoordonneeVoisinsGrilleDemineur(grille, (i, j))
+                for k in coord:
+                    if contientMineGrilleDemineur(grille, k):
+                        mines += 1
+                grille[i][j][const.CONTENU] = mines
     return None
