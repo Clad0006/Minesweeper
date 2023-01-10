@@ -210,3 +210,11 @@ def gagneGrilleDemineur(grille:list)-> bool:
             if (grille[i][j][const.CONTENU]==0 and grille[i][j][const.VISIBLE]==False) or (grille[i][j][const.CONTENU]==const.ID_MINE and grille[i][j][const.VISIBLE]==True):
                 res=False
     return res
+
+def perduGrilleDemineur(grille:list)-> bool:
+    res=False
+    for i in range(len(grille)):
+        for j in range(len(grille[0])):
+            if grille[i][j][const.CONTENU]==const.ID_MINE and grille[i][j][const.VISIBLE]==True:
+                res=True
+    return res
