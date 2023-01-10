@@ -182,45 +182,67 @@ def compterMinesVoisinesGrilleDemineur(grille: list) -> None:
                 grille[i][j][const.CONTENU] = mines
     return None
 
-def getNbMinesGrilleDemineur(grille:list)->int:
-    if type_grille_demineur(grille)==False:
+
+def getNbMinesGrilleDemineur(grille: list) -> int:
+    if type_grille_demineur(grille) == False:
         raise ValueError("getNbMinesGrilleDemineur : le paramètre n'est pas une grille")
-    res=0
+    res = 0
     for i in range(len(grille)):
         for j in range(len(grille[0])):
             if grille[i][j][const.CONTENU] == const.ID_MINE:
-                res+=1
+                res += 1
     return res
 
-def getAnnotationGrilleDemineur(grille:list,coord:tuple)->str:
+
+def getAnnotationGrilleDemineur(grille: list, coord: tuple) -> str:
     return grille[coord[0]][coord[1]][const.ANNOTATION]
 
-def getMinesRestantesGrilleDemineur(grille:list)->int:
+
+def getMinesRestantesGrilleDemineur(grille: list) -> int:
     nb = 0
     for i in range(len(grille)):
         for j in range(len(grille[0])):
             if grille[i][j][const.ANNOTATION] == const.FLAG:
                 nb += 1
-    return getNbMinesGrilleDemineur(grille)-nb
+    return getNbMinesGrilleDemineur(grille) - nb
 
-def gagneGrilleDemineur(grille:list)-> bool:
-    res=True
+
+def gagneGrilleDemineur(grille: list) -> bool:
+    res = True
     for i in range(len(grille)):
         for j in range(len(grille[0])):
-            if (grille[i][j][const.CONTENU]==0 and grille[i][j][const.VISIBLE]==False) or (grille[i][j][const.CONTENU]==const.ID_MINE and grille[i][j][const.VISIBLE]==True) or (grille[i][j][const.CONTENU]==const.ID_MINE and grille[i][j][const.ANNOTATION]!=const.FLAG):
-                res=False
+            if (grille[i][j][const.CONTENU] == 0 and grille[i][j][const.VISIBLE] == False) or (
+                    grille[i][j][const.CONTENU] == const.ID_MINE and grille[i][j][const.VISIBLE] == True) or (
+                    grille[i][j][const.CONTENU] == const.ID_MINE and grille[i][j][const.ANNOTATION] != const.FLAG):
+                res = False
     return res
 
-def perduGrilleDemineur(grille:list)-> bool:
-    res=False
+
+def perduGrilleDemineur(grille: list) -> bool:
+    res = False
     for i in range(len(grille)):
         for j in range(len(grille[0])):
-            if grille[i][j][const.CONTENU]==const.ID_MINE and grille[i][j][const.VISIBLE]==True:
-                res=True
+            if grille[i][j][const.CONTENU] == const.ID_MINE and grille[i][j][const.VISIBLE] == True:
+                res = True
     return res
 
-def reinitialiserGrilleDemineur(grille:list)->None:
+
+def reinitialiserGrilleDemineur(grille: list) -> None:
     for i in range(len(grille)):
         for j in range(len(grille[0])):
             reinitialiserCellule(grille[i][j])
     return None
+
+
+def decouvrirGrilleDemineur(grille: list, coord: tuple) -> set:
+    res = set()
+    grille[coord[0]][coord[1]][const.VISIBLE] = True
+    voisin = getCoordonneeVoisinsGrilleDemineur(grille, coord)
+    res.add(coord)
+    if grille[coord[0]][coord[1]][const.CONTENU] == 0:
+        for i in voisin:
+            grille[i[0]][i[1]][const.VISIBLE] = True
+            res.add(i)
+            if grille[i[0]][i[1]][const.CONTENU]==0 and grille[i[0]][i[1]][const.VISIBLE]==True:
+                decouvrirGrilleDemineur(grille,i)
+    return res
