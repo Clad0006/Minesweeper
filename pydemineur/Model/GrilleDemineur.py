@@ -202,3 +202,11 @@ def getMinesRestantesGrilleDemineur(grille:list)->int:
             if grille[i][j][const.ANNOTATION] == const.FLAG:
                 nb += 1
     return getNbMinesGrilleDemineur(grille)-nb
+
+def gagneGrilleDemineur(grille:list)-> bool:
+    res=True
+    for i in range(len(grille)):
+        for j in range(len(grille[0])):
+            if (grille[i][j][const.CONTENU]==0 and grille[i][j][const.VISIBLE]==False) or (grille[i][j][const.CONTENU]==const.ID_MINE and grille[i][j][const.VISIBLE]==True):
+                res=False
+    return res
