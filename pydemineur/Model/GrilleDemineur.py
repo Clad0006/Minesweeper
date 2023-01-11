@@ -234,15 +234,37 @@ def reinitialiserGrilleDemineur(grille: list) -> None:
     return None
 
 
-def decouvrirGrilleDemineur(grille: list, coord: tuple) -> set:
-    res = set()
-    grille[coord[0]][coord[1]][const.VISIBLE] = True
-    voisin = getCoordonneeVoisinsGrilleDemineur(grille, coord)
-    res.add(coord)
-    if grille[coord[0]][coord[1]][const.CONTENU] == 0:
-        for i in voisin:
-            grille[i[0]][i[1]][const.VISIBLE] = True
-            res.add(i)
-            if grille[i[0]][i[1]][const.CONTENU]==0 and grille[i[0]][i[1]][const.VISIBLE]==True:
-                decouvrirGrilleDemineur(grille,i)
-    return res
+def decouvrirGrilleDemineur(grille:list,coord:tuple) -> set:
+    coord_decouvert = []
+    coord_decouvert.append(coord)
+    cellule_a_explo= []
+    cellule_a_explo.append(coord)
+    cellule_voisine = 0
+    i=0
+    while len(cellule_a_explo) > i:
+        if getContenuCellule(getCelluleGrilleDemineur(grille,cellule_a_explo[i])) == 0:
+            cellule_voisine = getCoordonneeVoisinsGrilleDemineur(grille,cellule_a_explo[i])
+            for j in cellule_voisine:
+                if not (j in coord_decouvert):
+                    coord_decouvert.append(j)
+                if getContenuCellule(getCelluleGrilleDemineur(grille,j)) == 0 and not (j in cellule_a_explo) and \
+                        isVisibleCellule(getCelluleGrilleDemineur(grille,j)) == False:
+                    cellule_a_explo.append(j)
+        i+=1
+    return set(coord_decouvert)
+
+def simplifierGrilleDemineur(grille:list,coord:tuple)-> set:
+    coord_decouvert=[]
+    voisin=getCoordonneeVoisinsGrilleDemineur(grille,coord)
+    flag=0
+    for i in voisin:
+        if grille[i[0]][i[1]][const.ANNOTATION]==const.FLAG:
+            flag+=1
+    if flag==grille[coord[0]][coord[1]][const.CONTENU]:
+        for j in voisin:
+            if grille[j[0]][j[1]][const.VISIBLE]==False and grille[j[0]][j[1]][const.ANNOTATION]!=const.FLAG and grille[j[0]][j[1]][const.CONTENU]!=const.ID_MINE :
+                coord_decouvert.append(j)
+    if grille[coord[0]][coord[1]][const.VISIBLE]==True:
+        coord_decouvert=[]
+    print(coord_decouvert)
+    return set(coord_decouvert)
