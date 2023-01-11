@@ -266,5 +266,19 @@ def simplifierGrilleDemineur(grille:list,coord:tuple)-> set:
                 coord_decouvert.append(j)
     if grille[coord[0]][coord[1]][const.VISIBLE]==True:
         coord_decouvert=[]
-    print(coord_decouvert)
     return set(coord_decouvert)
+
+def ajouterFlagsGrilleDemineur(grille:list,coord:tuple)->set:
+    coord_flag=[]
+    non_decouvert=0
+    voisin=getCoordonneeVoisinsGrilleDemineur(grille,coord)
+    for i in voisin:
+        if grille[i[0]][i[1]][const.VISIBLE]==False:
+            non_decouvert+=1
+    if non_decouvert==grille[coord[0]][coord[1]][const.CONTENU]:
+        for j in voisin:
+            if grille[j[0]][j[1]][const.VISIBLE]==False:
+                grille[j[0]][j[1]][const.ANNOTATION]=const.FLAG
+                coord_flag.append(j)
+    print(coord_flag)
+    return set(coord_flag)
