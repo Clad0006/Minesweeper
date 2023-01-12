@@ -234,51 +234,68 @@ def reinitialiserGrilleDemineur(grille: list) -> None:
     return None
 
 
-def decouvrirGrilleDemineur(grille:list,coord:tuple) -> set:
-    coord_decouvert = []
-    coord_decouvert.append(coord)
-    cellule_a_explo= []
-    cellule_a_explo.append(coord)
+def decouvrirGrilleDemineur(grille: list, coord: tuple) -> set:
+    coord_decouvert = [coord]
+    cellule_a_explo = [coord]
     cellule_voisine = 0
-    i=0
+    i = 0
     while len(cellule_a_explo) > i:
-        if getContenuCellule(getCelluleGrilleDemineur(grille,cellule_a_explo[i])) == 0:
-            cellule_voisine = getCoordonneeVoisinsGrilleDemineur(grille,cellule_a_explo[i])
+        if getContenuCellule(getCelluleGrilleDemineur(grille, cellule_a_explo[i])) == 0:
+            cellule_voisine = getCoordonneeVoisinsGrilleDemineur(grille, cellule_a_explo[i])
             for j in cellule_voisine:
                 if not (j in coord_decouvert):
                     coord_decouvert.append(j)
-                if getContenuCellule(getCelluleGrilleDemineur(grille,j)) == 0 and not (j in cellule_a_explo) and \
-                        isVisibleCellule(getCelluleGrilleDemineur(grille,j)) == False:
+                if getContenuCellule(getCelluleGrilleDemineur(grille, j)) == 0 and not (j in cellule_a_explo) and \
+                        isVisibleCellule(getCelluleGrilleDemineur(grille, j)) == False:
                     cellule_a_explo.append(j)
-        i+=1
+        i += 1
     return set(coord_decouvert)
 
-def simplifierGrilleDemineur(grille:list,coord:tuple)-> set:
-    coord_decouvert=[]
-    voisin=getCoordonneeVoisinsGrilleDemineur(grille,coord)
-    flag=0
+
+def simplifierGrilleDemineur(grille: list, coord: tuple) -> set:
+    coord_decouvert = []
+    voisin = getCoordonneeVoisinsGrilleDemineur(grille, coord)
+    flag = 0
     for i in voisin:
-        if grille[i[0]][i[1]][const.ANNOTATION]==const.FLAG:
-            flag+=1
-    if flag==grille[coord[0]][coord[1]][const.CONTENU]:
+        if grille[i[0]][i[1]][const.ANNOTATION] == const.FLAG:
+            flag += 1
+    if flag == grille[coord[0]][coord[1]][const.CONTENU]:
         for j in voisin:
-            if grille[j[0]][j[1]][const.VISIBLE]==False and grille[j[0]][j[1]][const.ANNOTATION]!=const.FLAG and grille[j[0]][j[1]][const.CONTENU]!=const.ID_MINE :
+            if grille[j[0]][j[1]][const.VISIBLE] == False and grille[j[0]][j[1]][const.ANNOTATION] != const.FLAG and \
+                    grille[j[0]][j[1]][const.CONTENU] != const.ID_MINE:
                 coord_decouvert.append(j)
-    if grille[coord[0]][coord[1]][const.VISIBLE]==True:
-        coord_decouvert=[]
+    if grille[coord[0]][coord[1]][const.VISIBLE]:
+        coord_decouvert = []
     return set(coord_decouvert)
 
-def ajouterFlagsGrilleDemineur(grille:list,coord:tuple)->set:
-    coord_flag=[]
-    non_decouvert=0
-    voisin=getCoordonneeVoisinsGrilleDemineur(grille,coord)
+
+def ajouterFlagsGrilleDemineur(grille: list, coord: tuple) -> set:
+    coord_flag = []
+    non_decouvert = 0
+    voisin = getCoordonneeVoisinsGrilleDemineur(grille, coord)
     for i in voisin:
-        if grille[i[0]][i[1]][const.VISIBLE]==False:
-            non_decouvert+=1
-    if non_decouvert==grille[coord[0]][coord[1]][const.CONTENU]:
-        for j in voisin:
-            if grille[j[0]][j[1]][const.VISIBLE]==False:
-                grille[j[0]][j[1]][const.ANNOTATION]=const.FLAG
-                coord_flag.append(j)
-    print(coord_flag)
+        if not grille[i[0]][i[1]][const.VISIBLE]:
+            non_decouvert += 1
+    if non_decouvert == grille[coord[0]][coord[1]][const.CONTENU]:
+        for i in voisin:
+         if not grille[i[0]][i[1]][const.VISIBLE]:
+                grille[i[0]][i[1]][const.ANNOTATION]=const.FLAG
+                coord_flag.append(i)
     return set(coord_flag)
+
+
+def simplifierToutGrilleDemineur(grille: list) -> tuple:
+    cell_vis = []
+    cell_flag = []
+    cell_res=[]
+    for i in range(len(grille)):
+        for j in range(len(grille[0])):
+            cell_vis1 = (simplifierGrilleDemineur(grille, (i, j)))
+            cell_flag1 = (ajouterFlagsGrilleDemineur(grille, (i, j)))
+            for k in cell_vis1:
+                cell_vis.append(k)
+            for l in cell_flag1:
+                cell_flag.append(l)
+    print(cell_flag)
+    print(cell_vis)
+    return set(cell_vis), set(cell_flag)
